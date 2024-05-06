@@ -1,0 +1,26 @@
+
+.btnSearch{
+  background-color: rgb(52, 224, 161);
+  transition-duration: 0.5s;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.btnSearch:hover{
+  background-color: rgb(132, 233, 189);
+}
+.checkin{
+  top: 3px;
+  right: 40px;
+  background-color: rgb(52, 224, 161);
+}
+select
+{
+  outline: none;
+  border: none;
+  border: solid 1px gray;
+}
+img
+{
+  height: 300px;
+}
