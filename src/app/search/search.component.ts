@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HotelsService } from '../hotels.service';
 import Swal from 'sweetalert2';
 
@@ -23,14 +23,25 @@ export class SearchComponent implements OnInit{
   room_no:new FormControl(null,[Validators.required]),
   adult:new FormControl(null,[Validators.required]),
   child:new FormControl(null,[Validators.required]),
-  child_age:new FormControl(null,[Validators.required]),
+  child_age:new FormArray([new FormControl()],[Validators.required]),
   requiredCurrency:new FormControl(null,[Validators.required]),
 })
 constructor(private _HotelsService:HotelsService){}
 ngOnInit(): void {
 
 }
+get formNum(){
+  return this.formSearch.get('child_age') as FormArray
+}
+addAgeChild(event:any){
+  this.formNum.push(new FormControl())
+  event.target?.classList.add('d-none')
+}
+
 searchHotel(form:FormGroup){
+
+  console.log(form.value);
+
   const model=    {
     user_id: "emadkareem_testAPI",
     user_password: "emadkareemTest@2024",
@@ -45,22 +56,21 @@ searchHotel(form:FormGroup){
         room_no: form.value.room_no,
         adult: form.value.adult,
         child: form.value.child,
-        child_age: [
-          form.value.child_age
-        ]
+        child_age: form.value.child_age
       }
     ],
     requiredCurrency: form.value.requiredCurrency
 }
 this._HotelsService.getHotels(model).subscribe({
   next:(response:any)=>{
-    if(response.status.error){
+    if(response.status.errors){
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: response.status.error,
+        text: response.status.errors[0].errorMessage,
       });
     }
+    this.formSearch.reset()
     console.log(response);
     this.sessionId=response.status.sessionId
     this.dataSource=response.itineraries
@@ -70,7 +80,10 @@ this._HotelsService.getHotels(model).subscribe({
     this.show=true
   },
   error:(error)=>{
-    // console.log(error);
+    console.log(error);
+
+    this.formSearch.reset()
+
   }
 })
 }

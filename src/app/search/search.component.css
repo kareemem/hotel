@@ -24,3 +24,9 @@ img
 {
   height: 300px;
 }
+.addAgeChild
+{
+  background-color: rgb(52, 224, 161);
+  border: none;
+  border: 1px solid black;
+}
